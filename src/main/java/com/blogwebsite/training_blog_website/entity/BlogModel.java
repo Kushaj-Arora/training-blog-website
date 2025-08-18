@@ -1,5 +1,7 @@
 package com.blogwebsite.training_blog_website.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
