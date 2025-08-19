@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
             );
             return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
         }
-        
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         ErrorResponse error = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), "Something went wrong");

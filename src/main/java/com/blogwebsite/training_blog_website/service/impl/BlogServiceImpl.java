@@ -49,10 +49,17 @@ public class BlogServiceImpl implements BlogService{
 	
 	@Override
 	public BlogResponseDTO updateBlog(Long id, BlogDTO updateReq) {
-		BlogModel existingBlog=blogRepo.findById(id).orElseThrow(()-> new BlogNotFoundException("Blog Not Found with "+id));
-		existingBlog.setAuthor(updateReq.getAuthorName());
-		existingBlog.setContent(updateReq.getBlogContent());
-		return mapEntityToResponseDTO(blogRepo.save(existingBlog));
+		Optional<BlogModel> optionalBlog=blogRepo.findById(id);
+		System.out.println("Existing Blog Data"+ optionalBlog);
+		if (optionalBlog.isPresent()){
+			BlogModel existingBlog=optionalBlog.get();
+			existingBlog.setAuthor(updateReq.getAuthorName());
+			existingBlog.setContent(updateReq.getBlogContent());
+			return mapEntityToResponseDTO(blogRepo.save(existingBlog));
+		}
+		else{
+			throw new BlogNotFoundException("Blog Not Found");
+		}
 	}
 
 	@Override
