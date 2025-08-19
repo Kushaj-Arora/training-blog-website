@@ -3,14 +3,17 @@ package com.blogwebsite.training_blog_website.service.impl;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
-
+import com.blogwebsite.training_blog_website.exceptions.BlogNotFoundException;
 import com.blogwebsite.training_blog_website.dtos.BlogDTO;
 import com.blogwebsite.training_blog_website.dtos.BlogResponseDTO;
 import com.blogwebsite.training_blog_website.entity.BlogModel;
 import com.blogwebsite.training_blog_website.repository.BlogRepository;
 import com.blogwebsite.training_blog_website.service.BlogService;
 import org.springframework.stereotype.Service;
+
+import javax.swing.text.html.Option;
 
 @Service
 public class BlogServiceImpl implements BlogService{
@@ -32,13 +35,21 @@ public class BlogServiceImpl implements BlogService{
 	
 	@Override
 	public BlogResponseDTO getBlogById(Long id) {
-		BlogModel existingBlog=blogRepo.findById(id).orElseThrow(()-> new RuntimeException("Blog Not Found"));
-		return mapEntityToResponseDTO(existingBlog);
+
+		Optional<BlogModel> optionalBlog=blogRepo.findById(id);
+		System.out.println("Existing Blog Data"+ optionalBlog);
+		if (!optionalBlog.isPresent()){
+			throw new BlogNotFoundException("Blog Not Found");
+		}
+		else{
+			BlogModel existingBlog=optionalBlog.get();
+			return mapEntityToResponseDTO(existingBlog);
+		}
 	}
 	
 	@Override
 	public BlogResponseDTO updateBlog(Long id, BlogDTO updateReq) {
-		BlogModel existingBlog=blogRepo.findById(id).orElseThrow(()-> new RuntimeException("Blog Not Found"));
+		BlogModel existingBlog=blogRepo.findById(id).orElseThrow(()-> new BlogNotFoundException("Blog Not Found with "+id));
 		existingBlog.setAuthor(updateReq.getAuthorName());
 		existingBlog.setContent(updateReq.getBlogContent());
 		return mapEntityToResponseDTO(blogRepo.save(existingBlog));
