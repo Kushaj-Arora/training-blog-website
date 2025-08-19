@@ -9,8 +9,8 @@ import lombok.*;
 public class BlogDTO {
 
 	@NotBlank(message="Content can't be empty")
-	private String blog_content;
+	private String blogContent;
 	
 	@NotBlank(message="Author name can't be empty")
-	private String author_name;
+	private String authorName;
 }
