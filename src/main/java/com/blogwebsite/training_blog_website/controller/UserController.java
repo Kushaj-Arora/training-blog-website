@@ -30,14 +30,15 @@ public class UserController {
 	
 	@PostMapping("/signup")
 	public ResponseEntity<AuthResponseDto> signUpRequest(@Valid @RequestBody SignUpRequest request){
-		return ResponseEntity.ok(userService.signUpRequest(request));
+		AuthResponseDto resp=userService.signUpRequest(request);
+		return ResponseEntity.ok().header("X-Auth-Token",resp.getToken()).body(resp);
 	}
 	
 	
 
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponseDto> loginRequest(@Valid @RequestBody LoginRequest request) {
-	    return ResponseEntity.ok(userService.loginRequest(request));
+		AuthResponseDto resp=userService.loginRequest(request);
+		return ResponseEntity.ok().header("X-Auth-Token",resp.getToken()).body(resp);
 	}
-	
 }

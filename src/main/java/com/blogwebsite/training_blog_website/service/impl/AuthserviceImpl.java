@@ -11,14 +11,16 @@ import com.blogwebsite.training_blog_website.entity.UserModel;
 import com.blogwebsite.training_blog_website.exceptions.UserAlreadyExistsException;
 import com.blogwebsite.training_blog_website.repository.UserRepository;
 import com.blogwebsite.training_blog_website.service.AuthService;
+import com.blogwebsite.training_blog_website.utils.JwtUtils;
 
 @Service
 public class AuthserviceImpl implements AuthService{
 
 	private final UserRepository userRepo;
-	
-	public AuthserviceImpl(UserRepository userRepo) {
+	private final JwtUtils jwtUtil ;
+	public AuthserviceImpl(UserRepository userRepo, JwtUtils jwtUtil) {
 		this.userRepo=userRepo;
+		this.jwtUtil=jwtUtil;
 	}
 	
 	@Override
@@ -30,7 +32,8 @@ public class AuthserviceImpl implements AuthService{
 		}
 		UserModel user=UserModel.builder().username(request.getUsername()).email(request.getEmail()).password(request.getPassword()).build();
 		UserModel savedUser=userRepo.save(user);
-		return mapUserEntityToResponseDTO(savedUser, true);
+		String token=jwtUtil.generateToken(request.getUsername());
+		return mapUserEntityToResponseDTO(savedUser, true,token);
 	}
 	
 	@Override
@@ -39,7 +42,8 @@ public class AuthserviceImpl implements AuthService{
 		if(userDataByUserName.isPresent()) {
 			UserModel user=userDataByUserName.get();
 			if(user.getPassword().equals(request.getPassword())) {
-				return mapUserEntityToResponseDTO(user, true);
+				String token=jwtUtil.generateToken(request.getUsername());
+				return mapUserEntityToResponseDTO(user, true,token);
 			}
 			else {
 				throw new UserAlreadyExistsException("Invalid Password");
@@ -49,8 +53,8 @@ public class AuthserviceImpl implements AuthService{
 	}
 
 	
-	private AuthResponseDto mapUserEntityToResponseDTO(UserModel userModelResp,boolean isUserAuthenticated) {
+	private AuthResponseDto mapUserEntityToResponseDTO(UserModel userModelResp,boolean isUserAuthenticated,String token) {
 		return AuthResponseDto.builder().isUserAuthenticated(isUserAuthenticated).username(
-				userModelResp.getUsername()).build();
+				userModelResp.getUsername()).token(token).build();
 	}
 }

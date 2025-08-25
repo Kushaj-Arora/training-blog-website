@@ -15,5 +15,7 @@ public class AuthResponseDto {
 	private boolean isUserAuthenticated;
 	
 	private String username;
+	
+	private String token;
 }
 
