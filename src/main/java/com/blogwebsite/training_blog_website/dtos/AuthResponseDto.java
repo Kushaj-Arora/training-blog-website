@@ -10,8 +10,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class SignUpRequest {
-    private String username;
-    private String email;
-    private String password;
+@Builder
+public class AuthResponseDto {
+	private boolean isUserAuthenticated;
+	
+	private String username;
 }
+
