@@ -11,7 +11,7 @@ import com.blogwebsite.training_blog_website.entity.UserModel;
 import com.blogwebsite.training_blog_website.exceptions.UserAlreadyExistsException;
 import com.blogwebsite.training_blog_website.repository.UserRepository;
 import com.blogwebsite.training_blog_website.service.AuthService;
-import com.blogwebsite.training_blog_website.utils.JwtUtils;
+import com.blogwebsite.training_blog_website.security.JwtUtils;
 
 @Service
 public class AuthserviceImpl implements AuthService{

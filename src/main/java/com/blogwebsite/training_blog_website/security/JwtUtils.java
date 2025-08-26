@@ -2,6 +2,9 @@ package com.blogwebsite.training_blog_website.security;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.security.Key;
@@ -38,5 +41,10 @@ public class JwtUtils{
         } catch (JwtException | IllegalArgumentException e) {
             return false;
         }
+    }
+    
+    public String getAuthenticatedUsername() {
+    	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+    	return auth!=null ? auth.getName():null;
     }
 }
