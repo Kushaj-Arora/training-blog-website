@@ -10,6 +10,7 @@ import com.blogwebsite.training_blog_website.dtos.BlogDTO;
 import com.blogwebsite.training_blog_website.dtos.BlogResponseDTO;
 import com.blogwebsite.training_blog_website.entity.BlogModel;
 import com.blogwebsite.training_blog_website.entity.UserModel;
+import com.blogwebsite.training_blog_website.enums.BlogCategory;
 import com.blogwebsite.training_blog_website.repository.BlogRepository;
 import com.blogwebsite.training_blog_website.repository.UserRepository;
 import com.blogwebsite.training_blog_website.security.JwtUtils;
@@ -35,7 +36,7 @@ public class BlogServiceImpl implements BlogService{
 		Optional<UserModel> userPresent=userRepo.findByUsername(authUser);
 		if(userPresent.isPresent()) {
 			UserModel user=userPresent.get();
-			BlogModel blog=BlogModel.builder().author(request.getAuthorName()).content(request.getBlogContent()).createdBy(user).build();
+			BlogModel blog=BlogModel.builder().author(request.getAuthorName()).content(request.getBlogContent()).createdBy(user).category(request.getCategory()).build();
 			BlogModel savedBlog=blogRepo.save(blog);
 			return mapEntityToResponseDTO(savedBlog);			
 		}
@@ -52,6 +53,10 @@ public class BlogServiceImpl implements BlogService{
 		return blogRepo.findByCreatedByUsername(username).stream().map(this::mapEntityToResponseDTO).collect(Collectors.toList());
 	}
 	
+	@Override
+	public List<BlogResponseDTO> getAllBlogsByCategory(BlogCategory category){
+		return blogRepo.findByCategory(category).stream().map(this::mapEntityToResponseDTO).collect(Collectors.toList());		
+	}
 	
 	@Override
 	public BlogResponseDTO getBlogById(Long id) {
@@ -92,7 +97,7 @@ public class BlogServiceImpl implements BlogService{
 		return BlogResponseDTO.builder().id(
 		        blogModelResp.getId()).blog_content(
 		        blogModelResp.getContent()).author_name(
-		        blogModelResp.getAuthor()).blog_createdAt(
+		        blogModelResp.getAuthor()).category(blogModelResp.getCategory()).createdBy(blogModelResp.getCreatedBy().getUsername()).blog_createdAt(
 		        blogModelResp.getCreatedAt()).build();
 	}	
 }

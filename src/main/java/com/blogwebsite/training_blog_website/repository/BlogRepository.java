@@ -8,11 +8,15 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import com.blogwebsite.training_blog_website.entity.BlogModel;
+import com.blogwebsite.training_blog_website.enums.BlogCategory;
 
 @Repository
 public interface BlogRepository extends JpaRepository<BlogModel,Long> {
 
     @Query("SELECT b FROM BlogModel b WHERE b.createdBy.username = :username")
     List<BlogModel> findByCreatedByUsername(@Param("username") String username);
+
+    @Query("SELECT b from BlogModel b where b.category=:category")
+    List<BlogModel> findByCategory(@Param("category") BlogCategory category);
 
 }

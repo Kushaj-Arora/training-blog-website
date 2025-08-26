@@ -2,6 +2,8 @@ package com.blogwebsite.training_blog_website.entity;
 
 import java.time.LocalDateTime;
 
+import com.blogwebsite.training_blog_website.enums.BlogCategory;
+
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
@@ -33,6 +35,9 @@ public class BlogModel {
     @JoinColumn(name = "created_by", referencedColumnName = "username")
     private UserModel createdBy;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category")
+	private BlogCategory category;
 
 	private LocalDateTime createdAt;
 

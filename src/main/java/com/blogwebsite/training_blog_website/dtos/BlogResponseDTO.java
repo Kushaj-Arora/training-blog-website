@@ -4,6 +4,7 @@ package com.blogwebsite.training_blog_website.dtos;
 import java.time.LocalDateTime;
 
 import com.blogwebsite.training_blog_website.entity.BlogModel;
+import com.blogwebsite.training_blog_website.enums.BlogCategory;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,9 @@ public class BlogResponseDTO {
 	private Long id;
 	private String blog_content;	
 	private String author_name;
+	private String createdBy;
 	private LocalDateTime blog_createdAt;
+	private BlogCategory category;
 	/*
 	public BlogResponseDTO() {}
 	public BlogResponseDTO(Long id, String blog_content, String author_name, LocalDateTime blog_createdAt) {

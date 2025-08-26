@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.blogwebsite.training_blog_website.dtos.BlogDTO;
 import com.blogwebsite.training_blog_website.dtos.BlogResponseDTO;
+import com.blogwebsite.training_blog_website.enums.BlogCategory;
 import com.blogwebsite.training_blog_website.security.JwtUtils;
 import com.blogwebsite.training_blog_website.service.BlogService;
 
@@ -37,14 +38,21 @@ public class BlogController {
 	}
 	
 	@GetMapping()
-	public ResponseEntity<List<BlogResponseDTO>> getAllBlogs(@RequestParam Optional<String> username){
+	public ResponseEntity<List<BlogResponseDTO>> getAllBlogs(@RequestParam Optional<String> username,@RequestParam Optional<BlogCategory> category){
 		if(username.isPresent()) {
 			String presentUserName=username.get();
 			return ResponseEntity.ok().body(blogService.getAllBlogsByUsername(presentUserName));
 		}
-		String authUser=utils.getAuthenticatedUsername();
-		System.out.println("Auth User: "+authUser);
-		return ResponseEntity.ok().body(blogService.getAllBlogs());
+		else if(category.isPresent()) {
+			BlogCategory requestedCategory=category.get();
+			return ResponseEntity.ok().body(blogService.getAllBlogsByCategory(requestedCategory));
+		
+		}
+		else {
+			String authUser=utils.getAuthenticatedUsername();
+			System.out.println("Auth User: "+authUser);
+			return ResponseEntity.ok().body(blogService.getAllBlogs());
+		}
 	}
 	
 	@GetMapping("/{id}")
