@@ -5,7 +5,8 @@ import lombok.*;
 
 @Getter
 @Setter
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class BlogDTO {
 
 	@NotBlank(message="Content can't be empty")

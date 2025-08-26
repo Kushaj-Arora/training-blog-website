@@ -1,6 +1,7 @@
 package com.blogwebsite.training_blog_website.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blogwebsite.training_blog_website.dtos.BlogDTO;
@@ -31,13 +33,15 @@ public class BlogController {
 	
 	@PostMapping
 	public ResponseEntity<BlogResponseDTO> createNewBlog(@Valid @RequestBody BlogDTO request){
-		String authUser=utils.getAuthenticatedUsername();
-		System.out.println("Auth User: "+authUser);
 		return ResponseEntity.ok().body(blogService.createNewBlog(request));
 	}
 	
-	@GetMapping
-	public ResponseEntity<List<BlogResponseDTO>> getAllBlogs(){
+	@GetMapping()
+	public ResponseEntity<List<BlogResponseDTO>> getAllBlogs(@RequestParam Optional<String> username){
+		if(username.isPresent()) {
+			String presentUserName=username.get();
+			return ResponseEntity.ok().body(blogService.getAllBlogsByUsername(presentUserName));
+		}
 		String authUser=utils.getAuthenticatedUsername();
 		System.out.println("Auth User: "+authUser);
 		return ResponseEntity.ok().body(blogService.getAllBlogs());
@@ -58,5 +62,4 @@ public class BlogController {
 		blogService.deleteBlogByID(id);
 		return ResponseEntity.noContent().build();
 	}
-	
 }

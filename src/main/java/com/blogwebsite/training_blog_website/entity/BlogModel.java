@@ -28,6 +28,12 @@ public class BlogModel {
 	@NotBlank
 	private String author;
 	
+
+	@ManyToOne
+    @JoinColumn(name = "created_by", referencedColumnName = "username")
+    private UserModel createdBy;
+
+
 	private LocalDateTime createdAt;
 
     @PrePersist
