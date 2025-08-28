@@ -6,7 +6,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.blogwebsite.training_blog_website.security.JwtUtils;
-
+import org.springframework.http.HttpMethod;
 @Configuration
 public class SecurityConfig {
 
@@ -18,11 +18,11 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-    	http.csrf().disable().authorizeHttpRequests()
+    	http.csrf().disable().cors().and().authorizeHttpRequests(auth -> auth
             .requestMatchers("/api/users/login", "/api/users/signup").permitAll()
-            .requestMatchers("/api/blogs/**").authenticated()
-            .anyRequest().permitAll()
-            .and()
+            .requestMatchers(HttpMethod.GET, "/api/blogs/**").permitAll()
+            .anyRequest().authenticated()
+        )
             .addFilterBefore(new JwtAuthenticationFilter(jwtUtil), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

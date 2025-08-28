@@ -79,6 +79,7 @@ public class BlogServiceImpl implements BlogService{
 			BlogModel existingBlog=optionalBlog.get();
 			existingBlog.setAuthor(updateReq.getAuthorName());
 			existingBlog.setContent(updateReq.getBlogContent());
+			existingBlog.setCategory(updateReq.getCategory());
 			return mapEntityToResponseDTO(blogRepo.save(existingBlog));
 		}
 		else{
